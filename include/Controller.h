@@ -15,7 +15,7 @@ public:
 	
 	virtual ~Controller();
 	
-	virtual void loadData(const MatchData& MatchInfo);
+	virtual void loadData(const MatchData& MatchInfo);		// eek! dependencies! (on RoboEI (model))
 	
 	virtual void savaData(MatchData* MatchInfo);
 	

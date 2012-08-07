@@ -153,18 +153,24 @@ void RBGroup::set_CurRB(int rb)
 		(*rbgIter)->set_mFrame(false);
 	}
 	
-	rbg[rb]->set_mFrame(true);
+	if(rb != -1)
+		rbg[rb]->set_mFrame(true);
 }
 
 int RBGroup::get_CurRB()
 {
-	for(unsigned int i = 0; i < rbg.size(); ++i)
+	int result = 0;
+	
+	for(std::vector<RadioButton*>::iterator rbgIter = rbg.begin(); rbgIter != rbg.end(); ++rbgIter, ++result)
 	{
-		if(rbg[i]->get_mFrame() == true)
-			return i;
-			
-		// possibly returning nothing = dangerous
-		// want to break out of for loop (and function) at return of i,
-		// if no return by end of for loop, return a default number (standing for no RadioButton)
+		if((*rbgIter)->get_mFrame() == true)
+			break;
 	}
+	
+	if(result == rbg.size())
+	{
+		result = -1;
+	}
+	
+	return result;
 }
