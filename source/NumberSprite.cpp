@@ -47,17 +47,10 @@ void NumberSprite::show()
 		, pallet_num()
 		, mXCos[i], mYCo);
 		
-		int curValue = get_mFrame();
-		
-		for(int i = 0; i < mDigits; ++i)
-		{
-			int newValue = curValue%10;
-			curValue = curValue/10;
-			
-			PA_SetSpriteAnim(mScreenNum, mSpriteNums[i], newValue);
-			
-		}
 	}
+	
+	// update value
+	draw();
 	
 	// title
 	PA_CreateSprite(
