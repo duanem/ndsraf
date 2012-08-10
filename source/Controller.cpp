@@ -19,11 +19,11 @@ void Controller::handleKey()
 		mSuperController->handleKey();
 }
 
-void Controller::loadData(const MatchData& MatchInfo)
+void Controller::loadData()
 {
 }
 
-void Controller::savaData(MatchData* MatchInfo)
+void Controller::saveData()
 {
 }
 	

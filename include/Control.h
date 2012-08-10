@@ -6,7 +6,7 @@
 
 
 
-class Control: public View {
+class Control : public View {
 
 public:
 	

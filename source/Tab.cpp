@@ -58,7 +58,8 @@ void Tab::enable()
 		{
 			(*ControlIter)->show();
 		}
-		PA_LoadBackground(mScreenNum, 3, const_cast<PA_BgStruct*>(mBackGround));
+		if(mScreenNum == kBottomScreen)
+			PA_LoadBackground(mScreenNum, 3, const_cast<PA_BgStruct*>(mBackGround));
 		mShown = true;
 	}
 }
@@ -71,7 +72,8 @@ void Tab::disable()
 		{
 			(*ControlIter)->hide();
 		}
-		PA_DeleteBg(mScreenNum, 3);
+		if(mScreenNum == kBottomScreen)
+			PA_DeleteBg(mScreenNum, 3);
 		mShown = false;
 	}
 }
@@ -147,6 +149,7 @@ TabGroup::~TabGroup()
 
 void TabGroup::show()
 {
+	CurTab = 0;
 	for(std::vector<Tab*>::iterator TabIter = tabs.begin(); TabIter != tabs.end(); ++TabIter)
 	{
 		(*TabIter)->show();
@@ -156,6 +159,7 @@ void TabGroup::show()
 
 void TabGroup::hide()
 {
+	CurTab = tabs.size()-1;
 	for(std::vector<Tab*>::iterator TabIter = tabs.begin(); TabIter != tabs.end(); ++TabIter)
 	{
 		(*TabIter)->hide();
