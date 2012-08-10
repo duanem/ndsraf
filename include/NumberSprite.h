@@ -2,7 +2,7 @@
 #ifndef _raguna_NumSprite_h
 #define _raguna_NumSprite_h
 
-#include "control.h"
+#include "Control.h"
 
 #include <vector>
 

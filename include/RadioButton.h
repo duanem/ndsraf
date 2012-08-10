@@ -3,7 +3,7 @@
 #define raguna_radiobtn_h
 
 
-#include "control.h"
+#include "Control.h"
 
 #include <vector>
 
