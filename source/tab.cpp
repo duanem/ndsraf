@@ -193,7 +193,7 @@ void TabGroup::handle()
 	using namespace nsTG;
 	
 	std::vector<Tab*>::iterator found;
-	int touched = 0;
+	unsigned int touched = 0;
 	
 	if(Stylus.Released)
 	{	

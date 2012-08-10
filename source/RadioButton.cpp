@@ -130,7 +130,7 @@ void RBGroup::handle()
 	using namespace nsRB;
 	
 	std::vector<RadioButton*>::iterator found;
-	int touched = 0;
+	unsigned int touched = 0;
 	
 	if(Stylus.Released)
 	{	
@@ -173,7 +173,7 @@ int RBGroup::get_CurRB()
 	using namespace nsRB;
 	
 	std::vector<RadioButton*>::iterator found;
-	int result = 0;
+	unsigned int result = 0;
 	
 	//look through group for one that is true
 	found = std::find_if(rbg.begin(), rbg.end(), getFrame);
@@ -181,7 +181,7 @@ int RBGroup::get_CurRB()
 	//record position of the one that was true (rbg.size() = not found)
 	result = std::distance(rbg.begin(), found);
 	
-	if(result = rbg.size())
+	if(result == rbg.size())
 	{
 		result = -1;
 	}
