@@ -9,6 +9,7 @@
 
 #include "tab.h"
 
+#include <algorithm>
 #include <vector>
 
 
@@ -150,6 +151,7 @@ void TabGroup::show()
 	{
 		(*TabIter)->show();
 	}
+	tabs[CurTab]->enable();
 }
 
 void TabGroup::hide()
@@ -158,12 +160,11 @@ void TabGroup::hide()
 	{
 		(*TabIter)->hide();
 	}
+	tabs[CurTab]->disable();
 }
 
 void TabGroup::draw() 
 {
-	tabs[CurTab]->enable();
-	
 	if(CurTab != NewTab)
 	{
 		tabs[CurTab]->disable();
@@ -171,15 +172,13 @@ void TabGroup::draw()
 		tabs[CurTab]->enable();
 	}
 	
-	for(unsigned int i = 0; i < tabs.size(); ++i)
+	for(std::vector<Tab*>::iterator TabIter = tabs.begin(); TabIter != tabs.end(); ++TabIter)
 	{
-		int x = i;
-		if(x != CurTab)
-			tabs[x]->set_mFrame(false);
-		else
-			tabs[x]->set_mFrame(true);
-			
-		tabs[i]->draw();
+		(*TabIter)->set_mFrame(false);
+		
+		tabs[CurTab]->set_mFrame(true);
+		
+		(*TabIter)->draw();
 	}
 }
 
@@ -191,14 +190,22 @@ void TabGroup::update()
 
 void TabGroup::handle()
 {
+	using namespace nsTG;
+	
+	std::vector<Tab*>::iterator found;
+	int touched = 0;
+	
 	if(Stylus.Released)
-	{
-		for(unsigned int i = 0; i < tabs.size(); ++i)
+	{	
+		// check to see if one in the group was touched
+		found = std::find_if(tabs.begin(), tabs.end(), wasTouched);
+		
+		// assign numerical place of the one found (tabs.size() = not found)
+		touched = std::distance(tabs.begin(), found);
+		
+		if(touched != tabs.size())
 		{
-			if(tabs[i]->get_mScreen() == kBottomScreen && PA_SpriteStylusOver(tabs[i]->get_mSpriteNum()))
-			{
-				NewTab = i;
-			}
+			NewTab = touched;
 		}
 	}
 	else
@@ -233,5 +240,14 @@ int TabGroup::get_NewTab()
 int TabGroup::size()
 {
 	return tabs.size();
+}
+
+// --------------------------------------------------------------------------------------------------------------------------
+namespace nsTG
+{
+	bool wasTouched(Tab* tab)
+	{
+		return (PA_SpriteStylusOver(tab->get_mSpriteNum()) && tab->get_mScreen() == kBottomScreen);
+	}
 }
 

@@ -84,8 +84,10 @@ public:
 	/// add a RadioButton to the group
 	void add(RadioButton* rb);
 	
+	/// assigns RadioButton to be true.  -1 = all false
 	void set_CurRB(int rb);
 	
+	/// returns RadioButton that is true.  -1 = all false
 	int get_CurRB();
 	
 private:
@@ -93,5 +95,12 @@ private:
 	std::vector<RadioButton*> rbg;
 	
 };
+
+namespace nsRB
+{
+	bool getFrame(RadioButton* rb);
+
+	bool wasTouched(RadioButton* rb);
+}
 
 #endif

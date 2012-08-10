@@ -6,6 +6,9 @@
 
 #include "RadioButton.h"
 
+#include <algorithm>
+#include <vector>
+
 
 
 RadioButton::RadioButton(int screen, int x, int y, const unsigned char* sprite)
@@ -124,19 +127,27 @@ void RBGroup::disable()
 
 void RBGroup::handle()
 {
-	for(std::vector<RadioButton*>::iterator rbgIter = rbg.begin(); rbgIter != rbg.end(); ++rbgIter)
-	{
-		if(Stylus.Released && (*rbgIter)->get_mScreen() == kBottomScreen && PA_SpriteStylusOver((*rbgIter)->get_mSpriteNum()))
+	using namespace nsRB;
+	
+	std::vector<RadioButton*>::iterator found;
+	int touched = 0;
+	
+	if(Stylus.Released)
+	{	
+		// check to see if one in the group was touched
+		found = std::find_if(rbg.begin(), rbg.end(), wasTouched);
+		
+		// assign numerical place of the one found (rbg.size() = not found)
+		touched = std::distance(rbg.begin(), found);
+		
+		if(touched != rbg.size())
 		{
-			for(std::vector<RadioButton*>::iterator rbgIter2 = rbg.begin(); rbgIter2 != rbg.end(); ++rbgIter2)
+			for(std::vector<RadioButton*>::iterator rbgIter = rbg.begin(); rbgIter != rbg.end(); ++rbgIter)
 			{
-				if((*rbgIter2) != (*rbgIter))
-				{
-					(*rbgIter2)->set_mFrame(false);
-				}
+				(*rbgIter)->set_mFrame(false);
 			}
 			
-			(*rbgIter)->set_mFrame(true);
+		(*found)->set_mFrame(true);
 		}
 	}
 }
@@ -159,18 +170,35 @@ void RBGroup::set_CurRB(int rb)
 
 int RBGroup::get_CurRB()
 {
+	using namespace nsRB;
+	
+	std::vector<RadioButton*>::iterator found;
 	int result = 0;
 	
-	for(std::vector<RadioButton*>::iterator rbgIter = rbg.begin(); rbgIter != rbg.end(); ++rbgIter, ++result)
-	{
-		if((*rbgIter)->get_mFrame() == true)
-			break;
-	}
+	//look through group for one that is true
+	found = std::find_if(rbg.begin(), rbg.end(), getFrame);
+		
+	//record position of the one that was true (rbg.size() = not found)
+	result = std::distance(rbg.begin(), found);
 	
-	if(result == rbg.size())
+	if(result = rbg.size())
 	{
 		result = -1;
 	}
 	
 	return result;
 }
+
+namespace nsRB
+{
+	bool getFrame(RadioButton* rb)
+	{
+		return rb->get_mFrame();
+	}
+
+	bool wasTouched(RadioButton* rb)
+	{
+		return (PA_SpriteStylusOver(rb->get_mSpriteNum()) && rb->get_mScreen() == kBottomScreen);
+	}
+}
+
