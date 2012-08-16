@@ -75,9 +75,12 @@ void NumberSprite::hide()
 
 void NumberSprite::draw()
 {
-	while(calc_digit() < mDigits && calc_digit() != 0)
+	while(calc_digit() < mDigits)
 		del_digit();
 	while(calc_digit() > mDigits)
+		add_digit();
+		
+	if(mDigits == 0)
 		add_digit();
 	
 	int curValue = get_mFrame();
