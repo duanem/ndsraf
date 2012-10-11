@@ -102,6 +102,11 @@ int CheckBox::get_mSpriteNum()
 	return mSpriteNum;
 }
 
+int CheckBox::get_mTitleSpriteNum()
+{
+	return mTitleSpriteNum;
+}
+
 int CheckBox::get_mScreen()
 {
 	return mScreenNum;

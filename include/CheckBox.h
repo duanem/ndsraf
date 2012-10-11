@@ -41,6 +41,9 @@ public:
 	
 	/// return mSpriteNum
 	virtual int get_mSpriteNum();
+
+	/// return mTitleSpriteNum
+	int get_mTitleSpriteNum();
 	
 	/// return mScreenNum
 	virtual int get_mScreen();
