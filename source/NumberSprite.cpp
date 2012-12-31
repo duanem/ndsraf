@@ -42,7 +42,7 @@ void NumberSprite::show()
 		  mScreenNum
 		, mSpriteNums[i]
 		, (void*)Number_Sprite
-		, OBJ_SIZE_16X32
+		, OBJ_SIZE_8X16
 		, k256colors
 		, pallet_num()
 		, mXCos[i], mYCo);
@@ -60,7 +60,7 @@ void NumberSprite::show()
 		, OBJ_SIZE_64X32
 		, k256colors
 		, titlepallet_num()
-		, mXCos[mDigits-1] - 64, mYCo);
+		, mXCos[mDigits-1] - 68, mYCo-8);
 }
 
 void NumberSprite::hide()
@@ -154,7 +154,7 @@ void NumberSprite::add_digit()
 		  mScreenNum
 		, mSpriteNums[mDigits-1]
 		, (void*)Number_Sprite
-		, OBJ_SIZE_16X32
+		, OBJ_SIZE_8X16
 		, k256colors
 		, pallet_num()
 		, mXCos[mDigits-1], mYCo);
@@ -162,7 +162,7 @@ void NumberSprite::add_digit()
 	PA_SetSpriteXY(
 		  mScreenNum
 		, mTitleSpriteNum
-		, mXCos[mDigits-1] - 64, mYCo);	
+		, mXCos[mDigits-1] - 68, mYCo-8);	
 }
 
 void NumberSprite::del_digit()
@@ -174,7 +174,7 @@ void NumberSprite::del_digit()
 	PA_SetSpriteXY(
 		  mScreenNum
 		, mTitleSpriteNum
-		, mXCos[mDigits-1] - 64, mYCo);
+		, mXCos[mDigits-1] - 68, mYCo-8);
 }
 	
 int NumberSprite::pallet_num()
