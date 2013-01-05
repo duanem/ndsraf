@@ -159,7 +159,6 @@ void TabGroup::show()
 
 void TabGroup::hide()
 {
-	CurTab = tabs.size()-1;
 	for(std::vector<Tab*>::iterator TabIter = tabs.begin(); TabIter != tabs.end(); ++TabIter)
 	{
 		(*TabIter)->hide();
