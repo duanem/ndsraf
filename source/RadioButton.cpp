@@ -14,7 +14,7 @@
 
 
 RadioButton::RadioButton(View* superview, const Point& point, const unsigned char* sprite)
-: Control(superview)
+: Control(superview, point)
 , mSuperView(superview)
 , mScreenNum(get_mScreen())
 , mPoint(get_Global(point))
@@ -93,12 +93,12 @@ int RadioButton::pallet_num()
 
 // ------------------------------------------------------------------------------------------------------------------------------
 RBGroup::RBGroup(View* superview, const Point& point)
-: Control(superview)
+: Control(superview, point)
 , mSuperView(superview)
 , mScreenNum(get_mScreen())
 , mPoint(get_Global(point))
 , disabled(false)
-{	
+{
 }
 
 RBGroup::~RBGroup()
@@ -201,6 +201,31 @@ int RBGroup::get_CurRB()
 	}
 	
 	return result;
+}
+
+int RBGroup::get_mScreen() const
+{
+	if(mSuperView)
+		return mSuperView->get_mScreen();
+		
+	else
+		return mScreenNum;
+		
+}
+
+Point RBGroup::get_mPoint() const
+{
+	return mPoint;
+}
+
+Point RBGroup::get_Global(const Point& p)
+{
+	if(mSuperView)
+		return (mSuperView->get_mPoint() + p);
+		
+	else
+		return mPoint;
+		
 }
 
 namespace nsRB

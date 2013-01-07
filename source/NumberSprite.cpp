@@ -9,7 +9,7 @@
 #include <vector>
 
 NumberSprite::NumberSprite(View* superview, const Point& point, const unsigned char* sprite)
-: Control(superview)
+: Control(superview, point)
 , mSuperView(superview)
 , mScreenNum(get_mScreen())
 , mPoint(get_Global(point))
@@ -180,7 +180,7 @@ void NumberSprite::del_digit()
 		, mTitleSpriteNum
 		, mXCos[mDigits-1] - 68, mYCo-8);
 }
-	
+
 int NumberSprite::pallet_num()
 {
 	static int pallete = -1;

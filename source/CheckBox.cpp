@@ -12,7 +12,7 @@
 
 
 CheckBox::CheckBox(View* superview, const Point& point, const unsigned char* sprite)
-: Control(superview)
+: Control(superview, point)
 , mSuperView(superview)
 , mScreenNum(get_mScreen())
 , mPoint(get_Global(point))
@@ -164,6 +164,11 @@ void SpecialBox::hide()
 	PA_DeleteSprite(mScreenNum, mSpriteNum);
 }
 
+void SpecialBox::draw()
+{
+	PA_SetSpriteAnim(mScreenNum, mSpriteNum, mFrame);
+}
+
 void SpecialBox::handle()
 {
 	if(!disabled)
@@ -172,6 +177,26 @@ void SpecialBox::handle()
 		   PA_SpriteStylusOver(mSpriteNum))
 			mFrame = !mFrame;
 	}
+}
+
+void SpecialBox::set_disabled(bool set)
+{
+	disabled = set;
+}
+
+void SpecialBox::set_mFrame(bool frame)
+{
+	mFrame = frame;
+}
+
+bool SpecialBox::get_mFrame() const
+{
+	return mFrame;
+}
+
+int SpecialBox::get_mSpriteNum() const
+{
+	return mSpriteNum;
 }
 
 int SpecialBox::pallet_num()

@@ -10,8 +10,8 @@ class Control : public View {
 
 public:
 
-	Control(View* superview)
-	:View(superview, get_mScreen(), get_mPoint())
+	Control(View* superview, const Point& point)
+	:View(superview, get_mScreen(), point)
 	{
 	}
 	
@@ -22,6 +22,7 @@ public:
 	virtual void draw()=0;
 	
 	virtual void handle()=0;
+		
 	
 	//...
 	

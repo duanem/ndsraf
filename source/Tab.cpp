@@ -15,7 +15,7 @@
 
 
 Tab::Tab(View* superview, const Point& point, const unsigned char* sprite, const PA_BgStruct* background, Controller* controller)
-: Control(superview)
+: Control(superview, point)
 , mSuperView(superview)
 , mScreenNum(get_mScreen())
 , mPoint(get_Global(point))
@@ -143,7 +143,7 @@ int Tab::pallet_num()
 // ---------------------------------------------------------------------------------------------------------------------------
 
 TabGroup::TabGroup(View* superview, const Point& point, Controller* controller)
-: Control(superview)
+: Control(superview, point)
 , mSuperView(superview)
 , mScreenNum(get_mScreen())
 , mPoint(get_Global(point))

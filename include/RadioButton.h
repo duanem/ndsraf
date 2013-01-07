@@ -97,6 +97,12 @@ public:
 	/// returns RadioButton that is true.  -1 = all false
 	int get_CurRB();
 	
+	int get_mScreen() const;
+	
+	Point get_mPoint() const;
+	
+	Point get_Global(const Point& p);
+	
 private:
 	
 	View* mSuperView;

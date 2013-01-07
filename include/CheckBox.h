@@ -82,8 +82,23 @@ public:
 	/// hide sprites off screen
 	void hide();
 	
+	/// update animation
+	void draw();
+
 	/// handle touches
 	void handle();
+	
+	/// change disabled state
+	void set_disabled(bool set);
+	
+	/// return mFrame
+	bool get_mFrame() const;
+	
+	/// frame control
+	void set_mFrame(bool frame);
+	
+	/// return mSpriteNum
+	int get_mSpriteNum() const;
 	
 private:
 

@@ -67,7 +67,7 @@ void View::add(View* view)
 int View::get_mScreen() const
 {
 	if(mSuperView)
-		mSuperView->get_mScreen();
+		return mSuperView->get_mScreen();
 		
 	else
 		return mScreenNum;
