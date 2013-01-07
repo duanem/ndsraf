@@ -9,6 +9,11 @@
 class Control : public View {
 
 public:
+
+	Control(View* superview)
+	:View(superview, get_mScreen(), get_mPoint())
+	{
+	}
 	
 	virtual void show()=0;
 	

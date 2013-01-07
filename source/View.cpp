@@ -5,10 +5,13 @@
 #include "raguna.h"
 
 #include "View.h"
+#include "Point.h"
 
 
-
-View::View()
+View::View(View* superview, int screen, const Point& point)
+: mSuperView(superview)
+, mScreenNum(screen)
+, mPoint(point)
 {
 }
 
@@ -59,4 +62,29 @@ void View::update()
 void View::add(View* view)
 {
 	Views.push_back(view);
+}
+
+int View::get_mScreen() const
+{
+	if(mSuperView)
+		mSuperView->get_mScreen();
+		
+	else
+		return mScreenNum;
+		
+}
+
+Point View::get_mPoint() const
+{
+	return mPoint;
+}
+
+Point View::get_Global(const Point& p)
+{
+	if(mSuperView)
+		return (mSuperView->get_mPoint() + p);
+		
+	else
+		return mPoint;
+		
 }

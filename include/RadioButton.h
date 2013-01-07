@@ -4,6 +4,8 @@
 
 
 #include "Control.h"
+#include "View.h"
+#include "Point.h"
 
 #include <vector>
 
@@ -14,7 +16,7 @@ class RadioButton : public Control{
 public:
 
 	/// constructor
-	RadioButton(int screen, int x, int y, const unsigned char* sprite);
+	RadioButton(View* superview, const Point& point, const unsigned char* sprite);
 	
 	/// deconstructor
 	~RadioButton();
@@ -30,28 +32,33 @@ public:
 	
 	/// handle touches
 	void handle();
+	
+	/// change disabled state
+	void set_disabled(bool set);
 
 	/// mFrame control
 	void set_mFrame(bool set);
 	
 	/// return mFrame
-	bool get_mFrame();
+	bool get_mFrame() const;
 	
 	/// return mSpriteNum
-	int get_mSpriteNum();
-	
-	/// return mScreenNum
-	int get_mScreen();
+	int get_mSpriteNum() const;
 	
 private:
 
 	static int pallet_num();
 	
+	View* mSuperView;
 	int mScreenNum;
-	int mSpriteNum;
+	Point mPoint;
+	
 	const unsigned char* mName;
-	int mXCo, mYCo;
-	bool mFrame;
+	
+	int mFrame;
+	int disabled;
+	
+	int mSpriteNum;
 	
 };
 
@@ -61,7 +68,7 @@ class RBGroup : public Control {
 public:
 	
 	/// constructor
-	RBGroup();
+	RBGroup(View* superview, const Point& point);
 	
 	/// deconstructor
 	~RBGroup();
@@ -75,8 +82,8 @@ public:
 	/// update group
 	void draw();
 	
-	/// turn all radiobuttons off
-	void disable();
+	/// set disabled state
+	void set_disabled(bool set);
 	
 	/// handle touches as a group
 	void handle();
@@ -91,6 +98,12 @@ public:
 	int get_CurRB();
 	
 private:
+	
+	View* mSuperView;
+	int mScreenNum;
+	Point mPoint;
+	
+	int disabled;
 	
 	std::vector<RadioButton*> rbg;
 	

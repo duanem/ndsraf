@@ -8,13 +8,19 @@
 
 #include <vector>
 
-NumberSprite::NumberSprite(int screen, int x, int y, const unsigned char* title)
-: mScreenNum(screen)
-, mName(title)
+NumberSprite::NumberSprite(View* superview, const Point& point, const unsigned char* sprite)
+: Control(superview)
+, mSuperView(superview)
+, mScreenNum(get_mScreen())
+, mPoint(get_Global(point))
+, mName(sprite)
 , mFrame(0)
 , mDigits(1)
-, mYCo(y)
 {
+	mYCo = mPoint.get_mY();
+	
+	mXCos.push_back(mPoint.get_mX());
+	
 	if(mScreenNum == kBottomScreen)
 	{
 		mTitleSpriteNum = bottom_spritenum();
@@ -25,8 +31,6 @@ NumberSprite::NumberSprite(int screen, int x, int y, const unsigned char* title)
 		mTitleSpriteNum = top_spritenum();
 		mSpriteNums.push_back(top_spritenum());
 	}
-
-	mXCos.push_back(x);
 }
 
 NumberSprite::~NumberSprite()
@@ -99,7 +103,7 @@ void NumberSprite::handle()
 {
 }
 
-int NumberSprite::get_mFrame()
+int NumberSprite::get_mFrame() const
 {
 	return mFrame;
 }

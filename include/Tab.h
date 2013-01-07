@@ -7,7 +7,9 @@
 #include "Control.h"
 
 #include "Controller.h"
-#include "NumberSprite.h"
+
+#include "View.h"
+#include "Point.h"
 
 #include <vector>
 
@@ -16,7 +18,7 @@ class Tab : public Control {
 public:
 
 	/// constructor
-	Tab(int screen, int x, int y, const unsigned char* sprite, const PA_BgStruct* background, Controller* controller);
+	Tab(View* superview, const Point& point, const unsigned char* sprite, const PA_BgStruct* background, Controller* controller);
 	
 	/// destructor
 	virtual ~Tab();
@@ -28,10 +30,10 @@ public:
 	void hide();
 	
 	/// show members in group
-	void enable();
+	void display();
 	
 	/// hide members in group
-	void disable();
+	void conceal();
 	
 	/// update tab_sprite
 	void draw();
@@ -41,6 +43,9 @@ public:
 	
 	/// handle touches for members in group
 	void handle();
+	
+	/// allow all contents of a tab to be disabled or enabled
+	void set_disabled(bool set);
 
 	/// add a member to the tab
 	void add(Control* c);
@@ -49,28 +54,29 @@ public:
 	void set_mFrame(bool set);
 	
 	/// return mFrame
-	bool get_mFrame();
+	bool get_mFrame() const;
 	
 	/// return mSpriteNum
-	int get_mSpriteNum();
-	
-	/// return mScreenNum
-	int get_mScreen();
+	int get_mSpriteNum() const;
 	
 private:
 
 	static int pallet_num();
 	
+	View* mSuperView;
 	int mScreenNum;
-	int mSpriteNum;
-	int mXCo; int mYCo;
+	Point mPoint;
 	const unsigned char* mName;
-	bool mFrame; bool mShown;
 	const PA_BgStruct* mBackGround;
+	Controller* mController;
+	
+	bool mFrame;
+	bool mShown;
+	bool disabled;
 	
 	std::vector<Control*> tab;
 	
-	Controller* mController;
+	int mSpriteNum;
 
 };
 
@@ -81,7 +87,7 @@ class TabGroup : public Control {
 public:
 	
 	/// constructor
-	TabGroup(Controller* controller);
+	TabGroup(View* superview, const Point& point, Controller* controller);
 	
 	/// destructor
 	~TabGroup();
@@ -101,6 +107,8 @@ public:
 	/// handle tabs based off touches
 	void handle();
 	
+	void set_disabled(bool set);
+	
 	/// add a Tab to the group
 	void add(Tab* tab);
 	
@@ -111,21 +119,28 @@ public:
 	void set_NewTab(int tab);
 
 	/// return CurTab
-	int get_CurTab();
+	int get_CurTab() const;
 
 	/// return NewTab
-	int get_NewTab();
+	int get_NewTab() const;
 	
 	/// return number of tabs
-	int size();
+	int size() const;
 	
 private:
 	
-	int CurTab; int NewTab;
+	View* mSuperView;
+	int mScreenNum;
+	Point mPoint;
+	Controller* mController;
+	
+	int CurTab;
+	int NewTab;
+	
+	bool disabled;
 	
 	std::vector<Tab*> tabs;
 	
-	Controller* mController;
 };
 
 // --------------------------------------------------------------------------------------------------------------------------

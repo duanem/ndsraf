@@ -4,8 +4,6 @@
 
 #include <PA9.h>
 
-#include "model.h"
-
 /// controllers handle key presses
 class Controller {
 

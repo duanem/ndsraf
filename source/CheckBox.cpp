@@ -5,12 +5,17 @@
 #include "raguna.h"
 
 #include "CheckBox.h"
+#include "View.h"
+
+#include "Point.h"
 
 
 
-CheckBox::CheckBox(int screen, int x, int y, const unsigned char* sprite)
-: mScreenNum(screen)
-, mXCo(x), mYCo(y)
+CheckBox::CheckBox(View* superview, const Point& point, const unsigned char* sprite)
+: Control(superview)
+, mSuperView(superview)
+, mScreenNum(get_mScreen())
+, mPoint(get_Global(point))
 , mName(sprite)
 , mFrame(false)
 , disabled(false)
@@ -41,7 +46,7 @@ void CheckBox::show()
 		, OBJ_SIZE_16X16 // Sprite size
 		, k256colors // 256 colormode
 		, pallet_num() //Sprite palette number
-		, mXCo, mYCo);
+		, mPoint.get_mX(), mPoint.get_mY());
 	
 	/// title
 	PA_CreateSprite(
@@ -51,7 +56,7 @@ void CheckBox::show()
 		, OBJ_SIZE_64X32
 		, k256colors
 		, titlepallet_num()
-		, mXCo - 70, mYCo - 8);
+		, mPoint.get_mX()-70, mPoint.get_mY()-8);
 		
 	PA_SetSpriteAnim(mScreenNum, mSpriteNum, mFrame);
 }
@@ -77,14 +82,9 @@ void CheckBox::handle()
 	}
 }
 
-void CheckBox::disable()
+void CheckBox::set_disabled(bool set)
 {
-	disabled = true;
-}
-
-void CheckBox::enable()
-{
-	disabled = false;
+	disabled = set;
 }
 
 void CheckBox::set_mFrame(bool frame)
@@ -92,24 +92,19 @@ void CheckBox::set_mFrame(bool frame)
 	mFrame = frame;
 }
 
-bool CheckBox::get_mFrame()
+bool CheckBox::get_mFrame() const
 {
 	return mFrame;
 }
 
-int CheckBox::get_mSpriteNum()
+int CheckBox::get_mSpriteNum() const
 {
 	return mSpriteNum;
 }
 
-int CheckBox::get_mTitleSpriteNum()
+int CheckBox::get_mTitleSpriteNum() const
 {
 	return mTitleSpriteNum;
-}
-
-int CheckBox::get_mScreen()
-{
-	return mScreenNum;
 }
 
 int CheckBox::pallet_num()
@@ -130,10 +125,11 @@ int CheckBox::titlepallet_num()
 
 // ------------------------------------------------------------------------------------------------------------------------
 
-SpecialBox::SpecialBox(int screen, int x, int y, const unsigned char* sprite)
-: CheckBox(screen, x, y, sprite)
-, mScreenNum(screen)
-, mXCo(x), mYCo(y)
+SpecialBox::SpecialBox(View* superview, const Point& point, const unsigned char* sprite)
+: CheckBox(superview, point, sprite)
+, mSuperView(superview)
+, mScreenNum(get_mScreen())
+, mPoint(get_Global(point))
 , mName(sprite)
 , mFrame(false)
 , disabled(false)
@@ -158,7 +154,7 @@ void SpecialBox::show()
 		, OBJ_SIZE_64X32 // Sprite size
 		, k256colors // 256 colormode
 		, pallet_num() //Sprite palette number
-		, mXCo, mYCo);
+		, mPoint.get_mX(), mPoint.get_mY());
 		
 	PA_SetSpriteAnim(mScreenNum, mSpriteNum, mFrame);
 }
@@ -166,11 +162,6 @@ void SpecialBox::show()
 void SpecialBox::hide()
 {
 	PA_DeleteSprite(mScreenNum, mSpriteNum);
-}
-
-void SpecialBox::draw()
-{	
-	PA_SetSpriteAnim(mScreenNum, mSpriteNum, mFrame);
 }
 
 void SpecialBox::handle()
@@ -181,36 +172,6 @@ void SpecialBox::handle()
 		   PA_SpriteStylusOver(mSpriteNum))
 			mFrame = !mFrame;
 	}
-}
-
-void SpecialBox::disable()
-{
-	disabled = true;
-}
-
-void SpecialBox::enable()
-{
-	disabled = false;
-}
-
-void SpecialBox::set_mFrame(bool frame)
-{
-	mFrame = frame;
-}
-
-bool SpecialBox::get_mFrame()
-{
-	return mFrame;
-}
-
-int SpecialBox::get_mSpriteNum()
-{
-	return mSpriteNum;
-}
-
-int SpecialBox::get_mScreen()
-{
-	return mScreenNum;
 }
 
 int SpecialBox::pallet_num()

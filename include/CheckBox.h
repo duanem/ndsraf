@@ -5,6 +5,9 @@
 
 #include  "Control.h"
 
+#include "View.h"
+#include "Point.h"
+
 
 
 class CheckBox : public Control {
@@ -12,7 +15,7 @@ class CheckBox : public Control {
 public:
 
 	/// constructor
-	CheckBox(int screen, int x, int y, const unsigned char* sprite);
+	CheckBox(View* superview, const Point& point, const unsigned char* sprite);
 	
 	/// deconstuctor
 	virtual ~CheckBox();
@@ -29,38 +32,38 @@ public:
 	/// handle touches
 	virtual void handle();
 	
-	virtual void disable();
-	
-	virtual void enable();
+	/// change disabled state
+	virtual void set_disabled(bool set);
 	
 	/// return mFrame
-	virtual bool get_mFrame();
+	virtual bool get_mFrame() const;
 	
 	/// frame control
 	virtual void set_mFrame(bool frame);
 	
 	/// return mSpriteNum
-	virtual int get_mSpriteNum();
+	virtual int get_mSpriteNum() const;
 
 	/// return mTitleSpriteNum
-	int get_mTitleSpriteNum();
-	
-	/// return mScreenNum
-	virtual int get_mScreen();
-	
+	int get_mTitleSpriteNum() const;
+
 private:
 
 	static int pallet_num();
 	
 	static int titlepallet_num();
 
+	View* mSuperView;
 	int mScreenNum;
+	Point mPoint;
+	
+	const unsigned char* mName;
+	
+	int mFrame;
+	int disabled;
+	
 	int mSpriteNum;
 	int mTitleSpriteNum;
-	int mXCo, mYCo;
-	const unsigned char* mName;
-	bool mFrame;
-	bool disabled;
 };
 
 class SpecialBox : public CheckBox {
@@ -68,7 +71,7 @@ class SpecialBox : public CheckBox {
 public:
 
 	/// constructor
-	SpecialBox(int screen, int x, int y, const unsigned char* sprite);
+	SpecialBox(View* superview, const Point& point, const unsigned char* sprite);
 	
 	/// deconstuctor
 	~SpecialBox();
@@ -79,40 +82,23 @@ public:
 	/// hide sprites off screen
 	void hide();
 	
-	/// update frame
-	void draw();
-	
 	/// handle touches
 	void handle();
-	
-	/// do not allow touches
-	void disable();
-	
-	/// allow touches
-	void enable();
-	
-	/// return mFrame
-	bool get_mFrame();
-	
-	/// frame control
-	void set_mFrame(bool frame);
-	
-	/// return mSpriteNum
-	int get_mSpriteNum();
-	
-	/// return mScreenNum
-	int get_mScreen();
 	
 private:
 
 	static int pallet_num();
 
+	View* mSuperView;
 	int mScreenNum;
-	int mSpriteNum;
-	int mXCo, mYCo;
+	Point mPoint;
+	
 	const unsigned char* mName;
-	bool mFrame;
-	bool disabled;
+	
+	int mFrame;
+	int disabled;
+	
+	int mSpriteNum;
 	
 };
 

@@ -14,14 +14,17 @@
 
 
 
-Tab::Tab(int screen, int x, int y, const unsigned char* sprite, const PA_BgStruct* background, Controller* controller)
-: mScreenNum(screen)
-, mXCo(x), mYCo(y)
+Tab::Tab(View* superview, const Point& point, const unsigned char* sprite, const PA_BgStruct* background, Controller* controller)
+: Control(superview)
+, mSuperView(superview)
+, mScreenNum(get_mScreen())
+, mPoint(get_Global(point))
 , mName(sprite)
-, mFrame(false)
-, mShown(false)
 , mBackGround(background)
 , mController(controller)
+, mFrame(false)
+, mShown(false)
+, disabled(false)
 {
 	if(mScreenNum == kBottomScreen)
 		mSpriteNum = bottom_spritenum();
@@ -42,7 +45,7 @@ void Tab::show()
 		, OBJ_SIZE_64X32 // Sprite size
 		, k256colors // 256 colormode
 		, pallet_num() //Sprite palette number
-		, mXCo, mYCo);
+		, mPoint.get_mX(), mPoint.get_mY());
 }
 
 void Tab::hide()
@@ -50,7 +53,7 @@ void Tab::hide()
 	PA_DeleteSprite(mScreenNum, mSpriteNum);
 }
 
-void Tab::enable()
+void Tab::display()
 {
 	while(mShown == false)
 	{
@@ -64,7 +67,7 @@ void Tab::enable()
 	}
 }
 
-void Tab::disable()
+void Tab::conceal()
 {
 	while(mShown == true)
 	{
@@ -94,11 +97,19 @@ void Tab::update()
 
 void Tab::handle()
 {
-	for(std::vector<Control*>::iterator ControlIter = tab.begin(); ControlIter != tab.end(); ++ControlIter)
+	if(!disabled)
 	{
-		(*ControlIter)->handle();
+		for(std::vector<Control*>::iterator ControlIter = tab.begin(); ControlIter != tab.end(); ++ControlIter)
+		{
+			(*ControlIter)->handle();
+		}
+		mController->handleKey();
 	}
-	mController->handleKey();
+}
+
+void Tab::set_disabled(bool set)
+{
+	disabled = set;
 }
 
 void Tab::add(Control* c)
@@ -111,19 +122,14 @@ void Tab::set_mFrame(bool set)
 	mFrame = set;
 }
 
-bool Tab::get_mFrame()
+bool Tab::get_mFrame() const
 {
 	return mFrame;
 }
 
-int Tab::get_mSpriteNum()
+int Tab::get_mSpriteNum() const
 {
 	return mSpriteNum;
-}
-
-int Tab::get_mScreen()
-{
-	return mScreenNum;
 }
 
 int Tab::pallet_num()
@@ -136,10 +142,16 @@ int Tab::pallet_num()
 
 // ---------------------------------------------------------------------------------------------------------------------------
 
-TabGroup::TabGroup(Controller* controller)
-: CurTab(0)
-, NewTab(CurTab)
+TabGroup::TabGroup(View* superview, const Point& point, Controller* controller)
+: Control(superview)
+, mSuperView(superview)
+, mScreenNum(get_mScreen())
+, mPoint(get_Global(point))
 , mController(controller)
+, CurTab(0)
+, NewTab(CurTab)
+, disabled(false)
+
 {
 }
 
@@ -149,12 +161,12 @@ TabGroup::~TabGroup()
 
 void TabGroup::show()
 {
-	CurTab = 0;
+	CurTab = 0; // always show the first tab when reloading an entire TabGroup
 	for(std::vector<Tab*>::iterator TabIter = tabs.begin(); TabIter != tabs.end(); ++TabIter)
 	{
 		(*TabIter)->show();
 	}
-	tabs[CurTab]->enable();
+	tabs[CurTab]->display();
 }
 
 void TabGroup::hide()
@@ -163,16 +175,16 @@ void TabGroup::hide()
 	{
 		(*TabIter)->hide();
 	}
-	tabs[CurTab]->disable();
+	tabs[CurTab]->conceal();
 }
 
 void TabGroup::draw() 
 {
 	if(CurTab != NewTab)
 	{
-		tabs[CurTab]->disable();
+		tabs[CurTab]->conceal();
 		CurTab = NewTab;
-		tabs[CurTab]->enable();
+		tabs[CurTab]->display();
 	}
 	
 	for(std::vector<Tab*>::iterator TabIter = tabs.begin(); TabIter != tabs.end(); ++TabIter)
@@ -193,26 +205,34 @@ void TabGroup::update()
 
 void TabGroup::handle()
 {
-	using namespace nsTG;
-	
-	std::vector<Tab*>::iterator found;
-	unsigned int touched = 0;
-	
-	if(Stylus.Released)
-	{	
-		// check to see if one in the group was touched
-		found = std::find_if(tabs.begin(), tabs.end(), wasTouched);
+	if(!disabled)
+	{
+		using namespace nsTG;
 		
-		// assign numerical place of the one found (tabs.size() = not found)
-		touched = std::distance(tabs.begin(), found);
+		std::vector<Tab*>::iterator found;
+		unsigned int touched = 0;
 		
-		if(touched != tabs.size())
-		{
-			NewTab = touched;
+		if(Stylus.Released)
+		{	
+			// check to see if one in the group was touched
+			found = std::find_if(tabs.begin(), tabs.end(), wasTouched);
+			
+			// assign numerical place of the one found (tabs.size() = not found)
+			touched = std::distance(tabs.begin(), found);
+			
+			if(touched != tabs.size())
+			{
+				NewTab = touched;
+			}
 		}
+		else
+			mController->handleKey();
 	}
-	else
-		mController->handleKey();
+}
+
+void TabGroup::set_disabled(bool set)
+{
+	disabled = set;
 }
 
 void TabGroup::add(Tab* tab)
@@ -230,17 +250,17 @@ void TabGroup::set_NewTab(int tab)
 	NewTab = tab;
 }
 
-int TabGroup::get_CurTab()
+int TabGroup::get_CurTab() const
 {
 	return CurTab;
 }
 
-int TabGroup::get_NewTab()
+int TabGroup::get_NewTab() const
 {
 	return NewTab;
 }
 
-int TabGroup::size()
+int TabGroup::size() const
 {
 	return tabs.size();
 }

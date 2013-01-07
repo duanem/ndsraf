@@ -4,6 +4,9 @@
 
 #include "Control.h"
 
+#include "View.h"
+#include "Point.h"
+
 #include <vector>
 
 
@@ -13,7 +16,7 @@ class NumberSprite : public Control {
 public:
 	
 	/// constructor
-	NumberSprite(int screen, int x, int y, const unsigned char* title);
+	NumberSprite(View* superview, const Point& point, const unsigned char* sprite);
 	
 	/// destructor
 	~NumberSprite();
@@ -31,7 +34,7 @@ public:
 	void handle();
 	
 	/// return mFrame
-	int get_mFrame();
+	int get_mFrame() const;
 	
 	/// frame control
 	void set_mFrame(int value);
@@ -56,18 +59,21 @@ private:
 	static int pallet_num();
 	static int titlepallet_num();
 	
+	View* mSuperView;
 	
 	int mScreenNum;
-	int mTitleSpriteNum;
-	const unsigned char* mName;
-	int mFrame;
-	
-	int mDigits;
+	Point mPoint;
 	
 	int mYCo;
 	std::vector<int> mXCos;
 	
 	std::vector<int> mSpriteNums;
+	
+	const unsigned char* mName;
+	int mTitleSpriteNum;
+	
+	int mFrame;
+	int mDigits;
 	
 };
 	
